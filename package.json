@@ -14,12 +14,11 @@
   },
   "dependencies": {
     "@taikai/dappkit": "^2.3.1",
-    "@thirdweb-dev/react": "^3.13.0",
-    "@thirdweb-dev/sdk": "^3.10.20",
-    "ethers": "^5",
+    "ethers": "^6.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-select": "^5.7.3"
+    "react-select": "^5.7.3",
+    "web3.storage": "^4.5.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
