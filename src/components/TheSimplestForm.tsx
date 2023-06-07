@@ -171,7 +171,7 @@ function TheSimplestForm() {
   return <form>
     <Select options={NETWORKS_OPTIONS} value={network} onChange={onNetworkChange} />
     <InputWrapper>
-      <input value={name} onChange={e => setName(e.target.value)} name='name'  type='text' />
+      <input value={name} onChange={e => setName(e.target.value)} name='name'  type='text' placeholder="Your NFT name..." />
     </InputWrapper>
     <InputWrapper>
       <input name='file' type='file' onChange={handleOnFileChange} />
