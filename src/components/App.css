@@ -10,7 +10,7 @@ html,body,#root {
 }
 
 html {
-  background-image: url('../public/assets/background-desert.svg');
+  background-image: url('/assets/background-desert.svg');
   background-size: cover;
   background-repeat: no-repeat; 
   background-position: center;
