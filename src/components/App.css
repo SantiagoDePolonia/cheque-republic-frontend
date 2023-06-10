@@ -31,12 +31,7 @@ body {
   margin: 0 auto;
 }
 
-.logo {
-  float: left;  
-}
-
 .logo h1, .logo h2 {
-  text-align:left;
   line-height: 2em;
   margin:0;
 }
@@ -57,11 +52,12 @@ body {
   display:block;
   color:rgb(91,63,30);
   font-family: 'Itim', cursive;
+  margin-bottom:2em;
 }
 
 .header {
   margin: 1em 0;
-  text-align:right;
+  text-align:center;
 }
 
 .header::after {
@@ -93,7 +89,7 @@ body {
 }
 
 .eagle {
-  top: 130px;
+  top: 170px;
   background-image: url('../../public/assets/eagle.svg');
   width:50px;
   min-height:50px;

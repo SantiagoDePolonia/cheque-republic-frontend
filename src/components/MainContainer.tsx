@@ -6,8 +6,8 @@ function MainContainer({children}: {children: React.ReactNode}) {
     <div className="container">
       <header className="header">
         <div className="logo">
-          <h1>The simplest NFT generator</h1>
-          <h2>Just generate one for yourself!</h2>
+          <h1>Cheque Republic</h1>
+          <h2>Cheques on EVM compatible chains!</h2>
         </div>
       </header>
       <main className='main'>

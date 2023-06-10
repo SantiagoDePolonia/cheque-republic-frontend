@@ -10,16 +10,19 @@
     "preview": "vite preview"
   },
   "engines": {
-    "node": "^16"
+    "node": "^18"
   },
   "dependencies": {
-    "@taikai/dappkit": "^2.3.1",
+    "@types/react-datepicker": "^4.11.2",
     "crypto": "^1.0.1",
     "ethers": "^6.4.2",
     "react": "^18.2.0",
+    "react-datepicker": "^4.12.0",
     "react-dom": "^18.2.0",
+    "react-qr-code": "^2.0.11",
     "react-select": "^5.7.3",
-    "web3.storage": "^4.5.4"
+    "viem": "^1.0.2",
+    "wagmi": "^1.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
