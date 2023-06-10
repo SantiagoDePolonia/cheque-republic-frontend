@@ -3,11 +3,11 @@ export const NETWORKS_OPTIONS = [
     label: "Sepolia",
     value: "https://sepolia.infura.io/v3/3b53db43bd164953a1b04e00eb40f0b2",
     chainId: "0xaa36a7",
-    contractAddress: "0xf221D3C1e3a49Bce6FC6dCF2AB83680d2851C618",
+    contractAddress: "0x5C34E76Ec1B1081AB40fAe3e826F37A25C1c3890".toLowerCase(),
     tokens: [
       {
         label: "USDT",
-        value: "0x6175a8471c2122f778445e7e07a164250a19e661",
+        value: "0x6175a8471c2122f778445e7e07a164250a19e661".toLowerCase(),
       },
     ],
   },

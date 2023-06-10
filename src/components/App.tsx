@@ -24,7 +24,7 @@ function App() {
       <button onClick={() => connect()}>Connect Wallet</button> :
     (isWithdraw ? <WithdrawCheque connect={connect} /> :
       (chequeURL ? <TheChequeToPrint chequeURL={chequeURL} /> :
-      <TheChequeForm setChequeURL={setChequeURL} connect={connect} />))} 
+      <TheChequeForm setChequeURL={setChequeURL} />))} 
     </MainContainer>
   )
 }

@@ -2,7 +2,7 @@ import Select, { OnChangeValue } from 'react-select'
 import { ERC20_ABI, NETWORKS_OPTIONS } from '../constants';
 import { useCallback, useEffect, useState } from 'react';
 import InputWrapper from './InputWrapper';
-import { useAccount, useContractRead, useContractWrite, useSignMessage } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite } from 'wagmi';
 import { usePrepareContractWrite } from 'wagmi'
 import generateChequeHash from '../helpers/generateChequeHash';
 import ReactDatePicker from 'react-datepicker';
@@ -43,18 +43,16 @@ function TheChequeForm({setChequeURL}:TheChequeFormProps) {
 
   const [ sig1, setSig1 ] = useState<string>();
   const [ sig2, setSig2 ] = useState<string>();
-  const { data: data1, isLoading: signIsLoading1, signMessage: signMessage1, variables: variables1 } = useSignMessage()
-  const { data: data2, isLoading: signIsLoading2, signMessage: signMessage2, variables: variables2 } = useSignMessage()
 
   const [state, setState] = useState<SUBMIT_STATE>('init');
 
   const { isConnected, address } = useAccount();
     
-  const {data: myAllowance, isLoading} = useContractRead({
+  const {data: myAllowance, isLoading: isLoadingAddAllowanceWriteContract} = useContractRead({
     address: token.value as any,
     abi: ERC20_ABI,
     functionName: 'allowance',
-    args: [address, network.contractAddress],
+    args: [(address || '').toLowerCase(), network.contractAddress],
   })
 
   const { config, error: error1 } = usePrepareContractWrite({
@@ -69,12 +67,12 @@ function TheChequeForm({setChequeURL}:TheChequeFormProps) {
   useEffect(()=> {
     if(state === 'allowance_check') {
       console.log("myAllowance", myAllowance, write, error1, error2);
-      // if(myAllowance == 0n){
+      if(myAllowance == 0n){
         console.log("WRITE")
         write?.()
-      // } else if(!isLoading) {
-        // setState('generate_sig1')
-      // }
+      } else if(!isLoadingAddAllowanceWriteContract) {
+        setState('generate_sig1')
+      }
     }
   
   }, [state, myAllowance, write, error1, error2])
@@ -82,37 +80,35 @@ function TheChequeForm({setChequeURL}:TheChequeFormProps) {
   useEffect(() => {
     if(state === 'issue_cheque') {
       window.location.origin
-      setChequeURL(`${window.location.origin}/withdraw?sig1=${sig1}&sig2=${sig2}&expiration=${dateToTimestamp(expiration)}&amount=${amount}&name=${name}&networkChainId=${network.chainId}&tokenAddress=${token.value}&drawer=${address}`)
+      setChequeURL(`${window.location.origin}/withdraw?sig1=${sig1}&sig2=${sig2}&expiration=${dateToTimestamp(expiration)}&amount=${amount}&name=${name}&networkChainId=${network.chainId}&tokenAddress=${token.value}&drawer=${address?.toLowerCase()}`)
     }
-  }, [state])
+  }, [state, sig1, sig2, setChequeURL, expiration, amount, name, network.chainId, token.value, address])
 
   useEffect(() => {
     if(state === 'generate_sig1') {
       // signMessage1
-      const chequeHash = generateChequeHash(token.value, amount, dateToTimestamp(expiration), name, address);
+      const chequeHash = generateChequeHash(token.value, amount, dateToTimestamp(expiration), name, (address || '').toLowerCase()).toLowerCase();
       const messageToSign = generateMessage1(chequeHash, String(network.chainId), network.contractAddress);
-      if(!signIsLoading1 && !variables1?.message) {
-        signMessage1({message: messageToSign});
-      }else if (variables1?.message && data1) {
-        setSig1(data1)
+      window.ethereum?.request?.({ method: 'personal_sign', params: [messageToSign, address?.toLowerCase()] }).then(message => {
+        setSig1(message)
         setState('generate_sig2')
-      }
+      })
+  
     }
-  }, [state, data1, variables1?.message])
+  }, [state])
 
   useEffect(() => {
     if(state === 'generate_sig2') {
       // signMessage2
-      const chequeHash = generateChequeHash(token.value, amount, dateToTimestamp(expiration), name, address);
-      const messageToSign = generateMessage2(token.value, chequeHash, amount, dateToTimestamp(expiration), name, address, network.contractAddress);
-      if(!signIsLoading2 && !variables2?.message) {
-        signMessage2({message: messageToSign});
-      }else if (variables2?.message && data2) {
-        setSig2(data2)
+
+      const chequeHash = generateChequeHash(token.value, amount, dateToTimestamp(expiration), name, (address || '').toLowerCase());
+      const messageToSign = generateMessage2(token.value, chequeHash, amount, dateToTimestamp(expiration), name, (address || '').toLowerCase(), network.contractAddress);
+      window.ethereum?.request?.({ method: 'personal_sign', params: [messageToSign, address?.toLowerCase()] }).then(message => {
+        setSig2(message)
         setState('issue_cheque')
-      }
+      })
     }
-  }, [state, data2, variables2?.message])
+  }, [state, address])
 
 
   const onNetworkChange = useCallback((
@@ -132,7 +128,8 @@ function TheChequeForm({setChequeURL}:TheChequeFormProps) {
     e.preventDefault();
     setState('allowance_check');
   };
-  const disableSubmitButton = !name || !network || !token || !amount || !expiration || !isConnected ;//|| isLoading;
+
+  const disableSubmitButton = !name || !network || !token || !amount || !expiration || !isConnected || isLoadingAddAllowanceWriteContract;
   console.log("state", state);
   return <form>
     <InputWrapper>
