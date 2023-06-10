@@ -1,6 +1,7 @@
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { CHEQUE_REPUBLIC_ABI } from "../constants";
 import { encodeBytes32String, keccak256 } from "ethers";
+import InputWrapper from "./InputWrapper";
 
 interface CommitWithdrawalProps {
   contractAddress: string;
@@ -12,9 +13,10 @@ interface CommitWithdrawalProps {
   amount: string;
   expiration:string;
   name:string;
+  setPayee: (payee: string) => void;
 }
 
-function MakeWithdrawal({contractAddress, chequeHash, drawer, sig2, payee, expiration, amount, tokenAddress, name}:CommitWithdrawalProps) {
+function MakeWithdrawal({contractAddress, chequeHash, drawer, sig2, payee, expiration, amount, tokenAddress, name, setPayee}:CommitWithdrawalProps) {
 
   const {config} = usePrepareContractWrite({
     address: contractAddress,
@@ -25,8 +27,8 @@ function MakeWithdrawal({contractAddress, chequeHash, drawer, sig2, payee, expir
       chequeHash,
       drawer,
       tokenAddress,
-      parseInt(amount),
-      parseInt(expiration),
+      amount,
+      expiration,
       keccak256(encodeBytes32String(name)),
       sig2,
       payee
@@ -46,6 +48,11 @@ function MakeWithdrawal({contractAddress, chequeHash, drawer, sig2, payee, expir
   // }, [isSuccess])
 
   return (<>
+      <InputWrapper>
+        <label htmlFor='payee'>Payee (address to pay issued amount)</label>
+        <input type='text' value={payee} onChange={(e) => setPayee(e.target.value.toLowerCase())}/>
+      </InputWrapper>
+
     <button onClick={handleClickWithdraw}>Withdraw</button>
   </>)
 }

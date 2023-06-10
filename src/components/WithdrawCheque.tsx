@@ -52,6 +52,7 @@ function WithdrawCheque() {
         tokenAddress={tokenAddress || ''}
         name={name || ''}
         sig2={sig2 || ''}
+        setPayee={setPayee}
       />
     </TransactionWaitingWrapper>);
 }

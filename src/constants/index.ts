@@ -1,9 +1,11 @@
+export const DEFAULT_DECIMALS_SUFFIX = "000000000000000000";
+
 export const NETWORKS_OPTIONS = [
   {
     label: "Sepolia",
     value: "https://sepolia.infura.io/v3/3b53db43bd164953a1b04e00eb40f0b2",
     chainId: "0xaa36a7",
-    contractAddress: "0x5C34E76Ec1B1081AB40fAe3e826F37A25C1c3890".toLowerCase(),
+    contractAddress: "0x87313021f35B0557a10765131Ee216eD2ABF51e6".toLowerCase(),
     tokens: [
       {
         label: "USDT",
