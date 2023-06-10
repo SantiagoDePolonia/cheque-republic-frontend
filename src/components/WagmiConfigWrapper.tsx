@@ -2,7 +2,7 @@ import { WagmiConfig, configureChains, createConfig, mainnet, sepolia } from "wa
 import { publicProvider } from "wagmi/providers/public";
 
 const { /*chains, */publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, sepolia],
+  [/*mainnet, */sepolia],
   [publicProvider()],
 )
 const config = createConfig({

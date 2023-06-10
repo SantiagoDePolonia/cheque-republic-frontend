@@ -2,7 +2,7 @@ import Select, { OnChangeValue } from 'react-select'
 import { ERC20_ABI, NETWORKS_OPTIONS } from '../constants';
 import { useCallback, useEffect, useState } from 'react';
 import InputWrapper from './InputWrapper';
-import { useAccount, useConnect, useContractRead, useContractWrite, useNetwork, useSignMessage } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite, useSignMessage } from 'wagmi';
 import { usePrepareContractWrite } from 'wagmi'
 import generateChequeHash from '../helpers/generateChequeHash';
 import ReactDatePicker from 'react-datepicker';
@@ -10,7 +10,7 @@ import ReactDatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import generateMessage1 from '../helpers/generateMessage1';
 import generateMessage2 from '../helpers/generateMessage2';
-import { ConnectArgs } from 'wagmi/actions';
+
 function dateToTimestamp(date:Date | null) {
   return date ? String(Math.ceil(date?.getTime()/1000)) : "0";
 }
@@ -31,11 +31,9 @@ type SUBMIT_STATE = 'init' | 'allowance_check' | 'generate_sig1' | 'generate_sig
 
 interface TheChequeFormProps {
   setChequeURL: (chequeURL: string) => void;
-  connect: (args?: Partial<ConnectArgs> | undefined) => void
-
 }
 
-function TheChequeForm({setChequeURL, connect}:TheChequeFormProps) {
+function TheChequeForm({setChequeURL}:TheChequeFormProps) {
   const [network, setNetwork] = useState<NetworkOption>(NETWORKS_OPTIONS[0]);
   const [token, setToken] = useState(network.tokens[0]);
 
@@ -43,20 +41,15 @@ function TheChequeForm({setChequeURL, connect}:TheChequeFormProps) {
   const [amount, setAmount] = useState<string>("1");
   const [expiration, setExpiration] = useState<Date | null>(new Date());
 
-  const [sig1, setSig1] = useState<string>();
-  const [sig2, setSig2] = useState<string>();
+  const [ sig1, setSig1 ] = useState<string>();
+  const [ sig2, setSig2 ] = useState<string>();
   const { data: data1, isLoading: signIsLoading1, signMessage: signMessage1, variables: variables1 } = useSignMessage()
   const { data: data2, isLoading: signIsLoading2, signMessage: signMessage2, variables: variables2 } = useSignMessage()
 
   const [state, setState] = useState<SUBMIT_STATE>('init');
 
   const { isConnected, address } = useAccount();
-  const connectedNetwork = useNetwork()
     
-  // generateChequeHash(token.value, amount, expiration ? dateToTimestamp(expiration) : "0", name, address)
-  useEffect(()=> {
-    if(!isConnected || String(network.chainId) !== String(connectedNetwork.chain?.id)) connect()
-  }, [network.value, connectedNetwork.chain?.id]);
   const {data: myAllowance, isLoading} = useContractRead({
     address: token.value as any,
     abi: ERC20_ABI,
@@ -64,15 +57,27 @@ function TheChequeForm({setChequeURL, connect}:TheChequeFormProps) {
     args: [address, network.contractAddress],
   })
 
-  useEffect(() => {
+  const { config, error: error1 } = usePrepareContractWrite({
+    address: token.value as any,
+    abi: ERC20_ABI,
+    functionName: 'approve',
+    args: [network.contractAddress, "0xfffffffffffffffffffffffffffff"],
+  })
+
+  const { write, error: error2 } = useContractWrite(config)
+
+  useEffect(()=> {
     if(state === 'allowance_check') {
-      if(myAllowance === 0n){
-        write && write()
-      } else if(!isLoading) {
-        setState('generate_sig1')
-      }
+      console.log("myAllowance", myAllowance, write, error1, error2);
+      // if(myAllowance == 0n){
+        console.log("WRITE")
+        write?.()
+      // } else if(!isLoading) {
+        // setState('generate_sig1')
+      // }
     }
-  }, [state, myAllowance, isLoading])
+  
+  }, [state, myAllowance, write, error1, error2])
 
   useEffect(() => {
     if(state === 'issue_cheque') {
@@ -110,15 +115,6 @@ function TheChequeForm({setChequeURL, connect}:TheChequeFormProps) {
   }, [state, data2, variables2?.message])
 
 
-  const { config, error } = usePrepareContractWrite({
-    address: token.value as any,
-    abi: ERC20_ABI,
-    functionName: 'approve',
-    args: [network.contractAddress, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"],
-  })
-
-  const { write } = useContractWrite(config)
-
   const onNetworkChange = useCallback((
     newValue: OnChangeValue<NetworkOption, false>,
   ) => {
@@ -136,7 +132,7 @@ function TheChequeForm({setChequeURL, connect}:TheChequeFormProps) {
     e.preventDefault();
     setState('allowance_check');
   };
-  const disableSubmitButton = !name || !network || !token || !amount || !expiration || !isConnected || isLoading;
+  const disableSubmitButton = !name || !network || !token || !amount || !expiration || !isConnected ;//|| isLoading;
   console.log("state", state);
   return <form>
     <InputWrapper>

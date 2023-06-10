@@ -1,9 +1,8 @@
-import { ConnectArgs, prepareWriteContract, writeContract } from "wagmi/actions";
+import { ConnectArgs } from "wagmi/actions";
 import { CHEQUE_REPUBLIC_ABI, NETWORKS_OPTIONS } from "../constants";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import generateChequeHash from "../helpers/generateChequeHash";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { getBytes } from "ethers";
 
 interface WithdrawChequeProps {
   connect: (args?: Partial<ConnectArgs> | undefined) => void
@@ -37,10 +36,6 @@ function WithdrawCheque({connect}:WithdrawChequeProps) {
     write && write()
   };
   
-
-  useEffect(() => {
-    connect()
-  }, [])
   return (<>
     <button onClick={handleClickWithdraw}>Withdraw</button>
   </>);
