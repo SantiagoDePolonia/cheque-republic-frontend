@@ -13,6 +13,34 @@ export const NETWORKS_OPTIONS = [
       },
     ],
   },
+  {
+    label: "Scroll Alpha",
+    value: "https://alpha-rpc.scroll.io/l2",
+    chainId: "0x82751",
+    contractAddress: "0x9Ec3408Fc2aC6f00d7bFD0b468863fa6DeB6d5ad".toLowerCase(),
+    tokens: [],
+  },
+  {
+    label: "Gnosis testnet Chiado",
+    value: "https://rpc.chiadochain.net",
+    chainId: "0x27d8",
+    contractAddress: "0x9Ec3408Fc2aC6f00d7bFD0b468863fa6DeB6d5ad".toLowerCase(),
+    tokens: [],
+  },
+  {
+    label: "Optimism",
+    value: "https://sepolia.infura.io/v3/3b53db43bd164953a1b04e00eb40f0b2",
+    chainId: "0xa",
+    contractAddress: "0x9Ec3408Fc2aC6f00d7bFD0b468863fa6DeB6d5ad".toLowerCase(),
+    tokens: [],
+  },
+  {
+    label: "Taiko",
+    value: "https://rpc.test.taiko.xyz",
+    chainId: "0x28c5d",
+    contractAddress: "...".toLowerCase(),
+    tokens: [],
+  },
 ];
 
 export const CHEQUE_REPUBLIC_ABI = [

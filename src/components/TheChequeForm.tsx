@@ -1,4 +1,5 @@
 import Select, { OnChangeValue } from 'react-select'
+import CreatableSelect from 'react-select/creatable';
 import { DEFAULT_DECIMALS_SUFFIX, ERC20_ABI, NETWORKS_OPTIONS } from '../constants';
 import { useCallback, useEffect, useState } from 'react';
 import InputWrapper from './InputWrapper';
@@ -139,7 +140,7 @@ function TheChequeForm({setChequeURL}:TheChequeFormProps) {
 
     <InputWrapper>
       <label>Token</label>
-      <Select name='token' value={token} options={network.tokens} onChange={onTokenChange}/>
+      <CreatableSelect name='token' value={token} options={network.tokens} onChange={onTokenChange}/>
     </InputWrapper>
 
     <InputWrapper>
