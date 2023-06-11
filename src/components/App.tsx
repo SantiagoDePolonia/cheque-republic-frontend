@@ -19,7 +19,7 @@ function App() {
   })
   if(!isConnected) {
     return (<MainContainer>
-      <button onClick={() => connect()}>Connect Wallet</button> :
+      <button onClick={() => connect()}>Connect Wallet</button>
     </MainContainer>);
   }
   if(isWithdraw) {
