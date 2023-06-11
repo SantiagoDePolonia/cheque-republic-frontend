@@ -1,7 +1,11 @@
-# The simplest NFT creator
+# The Cheque Republic frontend
 
-URL: http://the-simplest-nft-creator.surge.sh
-
-YouTube: https://youtu.be/BiMQfb-mAu0
+URL with uploaded dApp: http://cheque-republic.surge.sh
 
 This is the simplest NFT creator.
+
+### How to run?
+
+```
+$ yarn dev
+```

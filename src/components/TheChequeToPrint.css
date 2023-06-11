@@ -1,0 +1,34 @@
+.cheque-to-print{
+  position:fixed;
+  width:100vw;
+  height:100vh;
+  top:0;
+  left:0;
+  background-color:#FFF;
+  align-items: center;
+  justify-content: center;
+}
+.cheque-to-print >.cheque-frame {
+  display: flex;
+  border: 2px solid #000;
+  margin-left:auto;
+  margin-right:auto;
+  padding: 0 24px;
+  margin: 200px;
+}
+.cheque-to-print .details {
+  text-align:center;
+  width: 100%;
+}
+.cheque-to-print .header {
+  text-align:left;
+  display: flex;
+  flex-direction: row;
+}
+.cheque-to-print .header img {
+  margin-right: 24px
+}
+
+.cheque-to-print .name {
+  text-decoration: underline;
+}

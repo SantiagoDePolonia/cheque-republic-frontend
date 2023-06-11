@@ -17,14 +17,24 @@ function App() {
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   })
+  if(!isConnected) {
+    return (<MainContainer>
+      <button onClick={() => connect()}>Connect Wallet</button> :
+    </MainContainer>);
+  }
+  if(isWithdraw) {
+    return (<MainContainer>
+      <WithdrawCheque />
+    </MainContainer>);
+  }
+
+  if(chequeURL) {
+    return <TheChequeToPrint chequeURL={chequeURL} />
+  }
 
   return (
     <MainContainer>
-      {!isConnected ?
-      <button onClick={() => connect()}>Connect Wallet</button> :
-    (isWithdraw ? <WithdrawCheque connect={connect} /> :
-      (chequeURL ? <TheChequeToPrint chequeURL={chequeURL} /> :
-      <TheChequeForm setChequeURL={setChequeURL} />))} 
+      <TheChequeForm setChequeURL={setChequeURL} />
     </MainContainer>
   )
 }

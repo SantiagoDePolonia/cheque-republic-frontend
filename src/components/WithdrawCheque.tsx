@@ -12,7 +12,7 @@ function WithdrawCheque() {
 
   const {address} = useAccount()
 
-  const [payee, setPayee] = useState<string>(address?.toLowerCase())
+  const [payee, setPayee] = useState<string>((address as any)?.toLowerCase())
 
   const searchParams = new URLSearchParams(window.location.search)
   const sig1 = searchParams.get('sig1')
@@ -25,7 +25,7 @@ function WithdrawCheque() {
   const networkChainId = searchParams.get('networkChainId')
   const contractAddress = useMemo(()=> NETWORKS_OPTIONS.find(network => network.chainId === networkChainId), [networkChainId])?.contractAddress || ''
 
-  const chequeHash = generateChequeHash(tokenAddress, amount, expiration, name, drawer);
+  const chequeHash = generateChequeHash(tokenAddress as any, amount as any, expiration as any, name as any, drawer as any);
 
   if(status=== 'sig1') {
     return <CommitWithdrawal
@@ -41,7 +41,7 @@ function WithdrawCheque() {
   }
 
   return (
-    <TransactionWaitingWrapper transactionToWaitFor={transactionToWaitFor}>
+    <TransactionWaitingWrapper transactionToWaitFor={transactionToWaitFor as any}>
       <MakeWithdrawal
         contractAddress={contractAddress}
         chequeHash={chequeHash}

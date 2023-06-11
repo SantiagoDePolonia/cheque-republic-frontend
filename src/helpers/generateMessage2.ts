@@ -9,17 +9,6 @@ function generateMessage2(
   signerAddress: string,
   chequeContractAddress: string
 ) {
-  console.log(
-    "message2",
-    tokenAddress,
-    chequeHash,
-    value,
-    expiration,
-    ethers.keccak256(ethers.encodeBytes32String(name)),
-    signerAddress,
-    chequeContractAddress
-  );
-
   return ethers.solidityPackedKeccak256(
     [
       "address",

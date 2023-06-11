@@ -3,11 +3,11 @@ import { useWaitForTransaction } from "wagmi";
 
 interface TransactionWaitingWrapperProps {
   children: ReactNode;
-  transactionToWaitFor: string;
+  transactionToWaitFor: string | null;
 }
 function TransactionWaitingWrapper({children, transactionToWaitFor}: TransactionWaitingWrapperProps) {
   const {  isLoading } = useWaitForTransaction({
-    hash: transactionToWaitFor,
+    hash: transactionToWaitFor as any,
   })
  
   if (isLoading && transactionToWaitFor) return <div>Processing…</div>

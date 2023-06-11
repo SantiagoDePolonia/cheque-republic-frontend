@@ -56,27 +56,27 @@ function TheChequeForm({setChequeURL}:TheChequeFormProps) {
     args: [(address || '').toLowerCase(), network.contractAddress],
   })
 
-  const { config, error: error1 } = usePrepareContractWrite({
+  const { config } = usePrepareContractWrite({
     address: token.value as any,
     abi: ERC20_ABI,
     functionName: 'approve',
     args: [network.contractAddress, "0xfffffffffffffffffffffffffffff"],
   })
 
-  const { write, error: error2 } = useContractWrite(config)
+  const { write, isSuccess } = useContractWrite(config)
 
   useEffect(()=> {
     if(state === 'allowance_check') {
-      console.log("myAllowance", myAllowance, write, error1, error2);
+
       if(myAllowance == 0n){
-        console.log("WRITE")
+
         write?.()
       } else if(!isLoadingAddAllowanceWriteContract) {
         setState('generate_sig1')
       }
     }
   
-  }, [state, myAllowance, write, error1, error2])
+  }, [state, myAllowance, write, isSuccess, isLoadingAddAllowanceWriteContract])
 
   useEffect(() => {
     if(state === 'issue_cheque') {
@@ -125,13 +125,13 @@ function TheChequeForm({setChequeURL}:TheChequeFormProps) {
       setToken(newValue);
   }, []);
 
-  const handleOnClickGenerateCheque = (e) => {
+  const handleOnClickGenerateCheque = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     setState('allowance_check');
   };
 
   const disableSubmitButton = !name || !network || !token || !amount || !expiration || !isConnected || isLoadingAddAllowanceWriteContract;
-  console.log("state", state);
+
   return <form>
     <InputWrapper>
       <label>Network</label>

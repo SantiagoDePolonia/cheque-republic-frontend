@@ -16,7 +16,7 @@ interface CommitWithdrawalProps {
 
 function CommitWithdrawal({contractAddress, chequeHash, drawer, sig1, payee, setPayee, next, setTransactionToWaitFor}:CommitWithdrawalProps) {
   const {config, error} = usePrepareContractWrite({
-    address: contractAddress,
+    address: contractAddress as any,
     abi: CHEQUE_REPUBLIC_ABI,
     functionName: 'commitWithdrawal',
     args: [ chequeHash, drawer, sig1, payee]
@@ -28,13 +28,13 @@ function CommitWithdrawal({contractAddress, chequeHash, drawer, sig1, payee, set
   };
 
   useEffect(() => {
-    if(error?.shortMessage && error.shortMessage.endsWith('Address already set')) {
+    if((error as any)?.shortMessage && (error as any).shortMessage.endsWith('Address already set')) {
       next()
     }
   }, [error])
   useEffect(()=> {
     if(isSuccess) {
-      setTransactionToWaitFor(transactionNumber)
+      setTransactionToWaitFor(transactionNumber as any)
       setTimeout(() =>next(), 1000)
     }
   }, [isSuccess, next, transactionNumber]) 
